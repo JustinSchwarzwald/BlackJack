@@ -40,6 +40,12 @@ public class Game {
 			System.out.print(player.getValue() + " = ");
 			player.printCards();
 			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			System.out.println("\n\nDealer's Hand");
 			dealer.printOneCard();
 			
@@ -47,6 +53,11 @@ public class Game {
 			
 			if(playingDeck.needNewShuffle())
 			{
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				System.out.println("Deck is low reshuffling");
 				getNewDeck();
 			}
@@ -63,6 +74,12 @@ public class Game {
 	
 	static int checkWinner()
 	{
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		if(dealer.getValue()>21)
 			System.out.println("Dealer Busted - You Win!");
 		else
@@ -91,6 +108,12 @@ public class Game {
 	{
 		if(dealer.getValue() >= 17 )
 		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			System.out.println("Dealer stays at " + dealer.getValue());
 			System.out.println("\n\nDealer's Hand");
 			System.out.print(dealer.getValue() + " = ");
@@ -99,12 +122,24 @@ public class Game {
 		}
 		while(dealer.getValue() < 17)
 		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			System.out.println(" \n\n" + "Your Hand");
 			System.out.print(player.getValue() + " = ");
 			player.printCards();
 			
 			drawnCard = playingDeck.drawCard();
 			dealer.insertCard(drawnCard);
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
 			System.out.println("\n\nDealer's Hand");
 			System.out.print(dealer.getValue() + " = ");
@@ -119,10 +154,22 @@ public class Game {
 	{
 		while(player.checkBust() == false && !endTurn)
 		{
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			System.out.println("\n\nHit or stay");
 			String input = sc.next();
 			if(input.compareTo("hit") == 0)
 			{
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
 				hit(player);
 				System.out.println(" \n\n" + "Your Hand");
 				System.out.print(player.getValue() + " = ");
@@ -130,6 +177,12 @@ public class Game {
 				
 				if(!player.checkBust())
 				{
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
 					System.out.println("\n\nDealer's Hand");
 					dealer.printOneCard();
 				}
@@ -139,6 +192,12 @@ public class Game {
 		}
 		if(player.checkBust())
 		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			System.out.println("\nYou Busted\n\n");
 			return false;
 		}
@@ -155,13 +214,28 @@ public class Game {
 		}
 		else
 		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			System.out.print("Dealer\n" + dealer.getValue() + " = ");
 			dealer.printCards();
 			System.out.println("\nDealer Wins");
 		}
 		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		
+		System.out.println("\n\n\n\nNew Hand\n\n\n\n");
 		player.removeAll();
 		dealer.removeAll();
+		endTurn = false;
 	}
 	
 }
