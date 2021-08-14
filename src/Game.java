@@ -9,7 +9,8 @@ public class Game {
 	static Player player = new Player();
 	static Card drawnCard;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		Scanner sc = new Scanner(System.in);
 		System.out.println("How many decks would you like to play with?");
 		numOfDeck = sc.nextInt();
@@ -53,6 +54,16 @@ public class Game {
 	{
 		//TODO:add logic and replace return
 		return 0;
+	}
+	
+	void hit() 
+	{
+		
+	}
+	
+	void stay()
+	{
+		
 	}
 
 }
