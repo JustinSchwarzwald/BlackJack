@@ -20,30 +20,37 @@ public class Game {
 		getNewDeck();
 		System.out.println("\n\nGame Starting...\n\n");
 		
-		
-		drawnCard = playingDeck.drawCard();
-		player.insertCard(drawnCard);
-		drawnCard = playingDeck.drawCard();
-		dealer.insertCard(drawnCard);
-		
-
-		
-		
-		drawnCard = playingDeck.drawCard();
-		player.insertCard(drawnCard);
-		drawnCard = playingDeck.drawCard();
-		dealer.insertCard(drawnCard);
-		
-		
-		System.out.println("Your Hand");
-		System.out.print(player.getValue() + " = ");
-		player.printCards();
-		
-		System.out.println("\n\nDealer's Hand");
-		dealer.printOneCard();
-		
-		takeTurns();
-		
+		while(true)
+		{
+			drawnCard = playingDeck.drawCard();
+			player.insertCard(drawnCard);
+			drawnCard = playingDeck.drawCard();
+			dealer.insertCard(drawnCard);
+			
+	
+			
+			
+			drawnCard = playingDeck.drawCard();
+			player.insertCard(drawnCard);
+			drawnCard = playingDeck.drawCard();
+			dealer.insertCard(drawnCard);
+			
+			
+			System.out.println("Your Hand");
+			System.out.print(player.getValue() + " = ");
+			player.printCards();
+			
+			System.out.println("\n\nDealer's Hand");
+			dealer.printOneCard();
+			
+			takeTurns();
+			
+			if(playingDeck.needNewShuffle())
+			{
+				System.out.println("Deck is low reshuffling");
+				getNewDeck();
+			}
+		}
 		
 	}
 	
@@ -56,7 +63,15 @@ public class Game {
 	
 	static int checkWinner()
 	{
-		//TODO:add logic and replace return
+		if(dealer.getValue()>21)
+			System.out.println("Dealer Busted - You Win!");
+		else
+			if(dealer.getValue() > player.getValue())
+				System.out.println("Dealer wins");
+			else if(player.getValue() > dealer.getValue())
+				System.out.println("You Win!");
+			else
+				System.out.println("Push");
 		return 0;
 	}
 	
@@ -74,10 +89,29 @@ public class Game {
 	
 	static void dealerTurn()
 	{
+		if(dealer.getValue() >= 17 )
+		{
+			System.out.println("Dealer stays at " + dealer.getValue());
+			System.out.println("\n\nDealer's Hand");
+			System.out.print(dealer.getValue() + " = ");
+			dealer.printCards();
+			System.out.println("\n\n\n");
+		}
 		while(dealer.getValue() < 17)
 		{
+			System.out.println(" \n\n" + "Your Hand");
+			System.out.print(player.getValue() + " = ");
+			player.printCards();
+			
 			drawnCard = playingDeck.drawCard();
 			dealer.insertCard(drawnCard);
+			
+			System.out.println("\n\nDealer's Hand");
+			System.out.print(dealer.getValue() + " = ");
+			dealer.printCards();
+			System.out.println("\n\n\n");
+			
+
 		}	
 	}
 	
@@ -94,8 +128,11 @@ public class Game {
 				System.out.print(player.getValue() + " = ");
 				player.printCards();
 				
-				System.out.println("\n\nDealer's Hand");
-				dealer.printOneCard();
+				if(!player.checkBust())
+				{
+					System.out.println("\n\nDealer's Hand");
+					dealer.printOneCard();
+				}
 			}
 				if(input.compareTo("stay") == 0)
 					stay();
@@ -122,6 +159,9 @@ public class Game {
 			dealer.printCards();
 			System.out.println("\nDealer Wins");
 		}
+		
+		player.removeAll();
+		dealer.removeAll();
 	}
 	
 }

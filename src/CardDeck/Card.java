@@ -53,7 +53,23 @@ public class Card {
 	
 	public void getCardDetail()
 	{
-		System.out.print(value + "" + suit + " ");
+		switch (value){
+		case 11:
+			System.out.print("J" + "" + suit + " ");
+			break;
+		case 12:
+			System.out.print("Q" + "" + suit + " ");
+			break;
+		case 13:
+			System.out.print("K" + "" + suit + " ");
+			break;
+		case 1:
+			System.out.print("A" + "" + suit + " ");
+			break;
+		default:
+					System.out.print(value + "" + suit + " ");
+		}
+
 	}
 	
 }

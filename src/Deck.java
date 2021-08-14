@@ -1,4 +1,5 @@
 import CardDeck.Card;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -93,5 +94,15 @@ public class Deck {
 	void shuffleDeck()
 	{
 		Collections.shuffle(cardList);
+	}
+	
+	boolean needNewShuffle()
+	{
+		if ((cardList.size()*1.0) < count / 2.0)
+		{
+			return true;
+		}
+		else 
+			return false;
 	}
 }
