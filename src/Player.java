@@ -18,6 +18,8 @@ public class Player {
 	{
 		hand.add(card);
 		value = value + card.getValue();
+		if(value > 21 && card.isAce())
+			value = value - 10;
 	}
 	
 	void removeAll()
@@ -46,5 +48,12 @@ public class Player {
 	{
 		hand.get(0).getCardDetail();
 		System.out.println(", Unknown");
+	}
+	
+	public boolean checkBust()
+	{
+		if(value - aces*10 > 21)
+			return true;
+		else return false;
 	}
 }
