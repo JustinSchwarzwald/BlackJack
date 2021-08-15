@@ -6,11 +6,14 @@ public class Game {
 	static Deck playingDeck;
 	static int numOfDeck;
 	static Player dealer = new Player();
-	static Player player = new Player();
+	static moneyPlayer player = new moneyPlayer();
 	static Card drawnCard;
 	static boolean endTurn;
 	static Scanner sc = new Scanner(System.in);
-	
+	static int quickSleep = 1200;
+	static int wager = 0;
+	static String input;
+	static int iWager = -1;
 	public static void main(String[] args) 
 	{
 
@@ -20,8 +23,17 @@ public class Game {
 		getNewDeck();
 		System.out.println("\n\nGame Starting...\n\n");
 		
-		while(true)
+		while(!player.isBankrupt())
 		{
+			int amountAvail = player.getMoney();
+			System.out.println("Your balance is " + amountAvail);
+			System.out.println("How much would you like to wager?");
+			wager = sc.nextInt();
+			if(wager > amountAvail)
+				//TODO: add code to stop wager being over the amount that the player has
+			{}
+			
+			
 			drawnCard = playingDeck.drawCard();
 			player.insertCard(drawnCard);
 			drawnCard = playingDeck.drawCard();
@@ -41,7 +53,7 @@ public class Game {
 			player.printCards();
 			
 			try {
-				Thread.sleep(500);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -49,23 +61,65 @@ public class Game {
 			System.out.println("\n\nDealer's Hand");
 			dealer.printOneCard();
 			
-			takeTurns();
+			if(dealer.hand.get(0).getValue() == 1)
+				System.out.println("Would you like insurance? \n Yes/No");
+			input = sc.next();
+			//TODO: insurance cannot be more than half of wager and must have funds
+			System.out.println("How much would you like to wager on insurance");
+			iWager = sc.nextInt();
+			
+			
+			switch (checkBlackJack())
+			{
+				case 1:
+					System.out.println("You Win - BlackJack!");
+					break;
+					
+				case 2:
+					System.out.println("Dealer Wins - BlackJack!");
+					break;
+			
+				case 3:
+					System.out.println("Push!");
+					break;
+			
+				default:
+					takeTurns();
+					break;
+			}
+				
+			
 			
 			if(playingDeck.needNewShuffle())
 			{
 				try {
-					Thread.sleep(500);
+					Thread.sleep(900);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.out.println("Deck is low reshuffling");
+				System.out.println("Deck is low reshuffling\n\n");
 				getNewDeck();
 			}
 		}
 		
+		System.out.println("You are out of money");
+		
 	}
 	
 	
+	private static int checkBlackJack() {
+		if(player.getValue() == 21)
+			if(dealer.getValue() == 21)
+				return 3;
+			else
+				return 1;
+		if(dealer.getValue() == 21)
+			return 2;	
+		
+		return 0;
+	}
+
+
 	static void getNewDeck()
 	{
 		playingDeck =  new Deck(numOfDeck);
@@ -75,18 +129,27 @@ public class Game {
 	static int checkWinner()
 	{
 		try {
-			Thread.sleep(500);
+			Thread.sleep(900);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
 		if(dealer.getValue()>21)
+		{
 			System.out.println("Dealer Busted - You Win!");
+			player.updateMoney(wager);
+		}
 		else
 			if(dealer.getValue() > player.getValue())
+			{
 				System.out.println("Dealer wins");
+				player.updateMoney(wager*-1);
+			}
 			else if(player.getValue() > dealer.getValue())
+			{
 				System.out.println("You Win!");
+				player.updateMoney(wager);
+			}
 			else
 				System.out.println("Push");
 		return 0;
@@ -109,7 +172,7 @@ public class Game {
 		if(dealer.getValue() >= 17 )
 		{
 			try {
-				Thread.sleep(500);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -123,7 +186,7 @@ public class Game {
 		while(dealer.getValue() < 17)
 		{
 			try {
-				Thread.sleep(500);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -132,11 +195,17 @@ public class Game {
 			System.out.print(player.getValue() + " = ");
 			player.printCards();
 			
+			System.out.println("\n\nDealer's Hand");
+			System.out.print(dealer.getValue() + " = ");
+			dealer.printCards();
+			System.out.println("\n");
+			
+			System.out.print("\n\n\nDealer Hits");
 			drawnCard = playingDeck.drawCard();
 			dealer.insertCard(drawnCard);
 			
 			try {
-				Thread.sleep(500);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -155,17 +224,17 @@ public class Game {
 		while(player.checkBust() == false && !endTurn)
 		{
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
 			System.out.println("\n\nHit or stay");
-			String input = sc.next();
+			input = sc.next();
 			if(input.compareTo("hit") == 0)
 			{
 				try {
-					Thread.sleep(500);
+					Thread.sleep(900);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -178,7 +247,7 @@ public class Game {
 				if(!player.checkBust())
 				{
 					try {
-						Thread.sleep(500);
+						Thread.sleep(900);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -193,7 +262,7 @@ public class Game {
 		if(player.checkBust())
 		{
 			try {
-				Thread.sleep(500);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -215,7 +284,7 @@ public class Game {
 		else
 		{
 			try {
-				Thread.sleep(500);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -223,18 +292,20 @@ public class Game {
 			System.out.print("Dealer\n" + dealer.getValue() + " = ");
 			dealer.printCards();
 			System.out.println("\nDealer Wins");
+			player.updateMoney(wager*-1);
 		}
 		
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
 		
-		System.out.println("\n\n\n\nNew Hand\n\n\n\n");
+		System.out.println("\n\n\nNew Hand\n\n\n");
 		player.removeAll();
 		dealer.removeAll();
+		iWager = -1;
 		endTurn = false;
 	}
 	

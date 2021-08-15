@@ -17,6 +17,8 @@ public class Player {
 	void insertCard(Card card)
 	{
 		hand.add(card);
+		if(card.isAce())
+			aces = aces + 1;
 		value = value + card.getValue();
 		if(value > 21 && card.isAce())
 			value = value - 10;
@@ -31,7 +33,22 @@ public class Player {
 	
 	int getValue()
 	{
-		return value;
+		int tempValue = value;
+		
+		if(value > 21 && aces > 0)
+		{
+			for(int i = 0; i < aces; i++) 
+			{
+				tempValue = tempValue - 10;
+				
+				if(tempValue < 21)
+					return tempValue;
+			}
+			return tempValue;
+			
+		}
+		else 
+			return tempValue;
 	}
 	
 	void printCards()
