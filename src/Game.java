@@ -25,8 +25,17 @@ public class Game {
 		
 		while(!player.isBankrupt())
 		{
+			
+			System.out.println("\n\n\nNew Hand\n\n\n");
+			player.removeAll();
+			dealer.removeAll();
+			iWager = -1;
+			endTurn = false;
+			
+			
 			int amountAvail = player.getMoney();
 			System.out.println("Your balance is " + amountAvail);
+			
 			System.out.println("How much would you like to wager?");
 			wager = sc.nextInt();
 			if(wager > amountAvail)
@@ -62,25 +71,42 @@ public class Game {
 			dealer.printOneCard();
 			
 			if(dealer.hand.get(0).getValue() == 1)
+			{	
 				System.out.println("Would you like insurance? \n Yes/No");
-			input = sc.next();
-			//TODO: insurance cannot be more than half of wager and must have funds
-			System.out.println("How much would you like to wager on insurance");
-			iWager = sc.nextInt();
+				input = sc.next();
+				//TODO: insurance cannot be more than half of wager and must have funds
+				System.out.println("How much would you like to wager on insurance");
+				iWager = sc.nextInt();
+			}
+
+
 			
 			
 			switch (checkBlackJack())
 			{
 				case 1:
 					System.out.println("You Win - BlackJack!");
+					player.updateMoney((int)(wager*1.5));
+					if(iWager != 1)
+						player.updateMoney(iWager*-1);
 					break;
 					
 				case 2:
 					System.out.println("Dealer Wins - BlackJack!");
+					if(iWager != 1)
+					{
+						System.out.println("Insurance Won");
+						player.updateMoney(iWager);
+					}
 					break;
 			
 				case 3:
 					System.out.println("Push!");
+					if(iWager != 1)
+					{
+						System.out.println("Insurance Won");
+						player.updateMoney(iWager);
+					}
 					break;
 			
 				default:
@@ -301,12 +327,6 @@ public class Game {
 			e.printStackTrace();
 		}
 		
-		
-		System.out.println("\n\n\nNew Hand\n\n\n");
-		player.removeAll();
-		dealer.removeAll();
-		iWager = -1;
-		endTurn = false;
 	}
 	
 }
